@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Akshat Sharma — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --ink:    #070604;
+  --fog:    #110e09;
+  --mist:   #1e1710;
+  --deep:   #2a1f14;
+  --amber:  #c8843a;
+  --gold:   #e8a84a;
+  --yellow: #f5c842;
+  --pale:   #ede0c8;
+  --ghost:  #9a8a70;
+  --dim:    #4a3c28;
+  --blood:  #6b1515;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--ink);
+  color:var(--pale);
+  font-family:'DM Mono',monospace;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ── CURSOR ── */
+#cur{
+  position:fixed;width:10px;height:10px;
+  background:var(--yellow);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  mix-blend-mode:difference;
+  transition:width .2s,height .2s;
+}
+#cur-ring{
+  position:fixed;width:36px;height:36px;
+  border:1px solid var(--amber);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:transform .12s ease,opacity .3s;
+  opacity:.35;
+}
+body:has(a:hover) #cur,body:has(button:hover) #cur{width:20px;height:20px;}
+
+/* ── NOISE + VIGNETTE ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:998;opacity:.4;
+}
+body::after{
+  content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.8) 100%);
+  pointer-events:none;z-index:997;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:1.4rem 5rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(to bottom,rgba(7,6,4,.97) 0%,transparent 100%);
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;
+  color:var(--pale);text-decoration:none;letter-spacing:.05em;
+}
+.nav-logo span{color:var(--yellow);}
+nav ul{list-style:none;display:flex;gap:2.5rem;}
+nav ul a{
+  color:var(--ghost);text-decoration:none;
+  font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;
+  transition:color .3s;position:relative;
+}
+nav ul a::after{
+  content:'';position:absolute;bottom:-3px;left:0;
+  width:0;height:1px;background:var(--yellow);transition:width .3s;
+}
+nav ul a:hover{color:var(--yellow);}
+nav ul a:hover::after{width:100%;}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;position:relative;
+  display:flex;align-items:center;
+  overflow:hidden;background:var(--ink);
+}
+#hero-canvas{position:absolute;inset:0;z-index:0;}
+
+/* Background illustrated scene (CSS drawn) */
+.hero-scene{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+}
+
+.hero-layout{
+  position:relative;z-index:10;
+  width:100%;max-width:1300px;margin:0 auto;
+  padding:0 5rem;
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;gap:4rem;
+  min-height:100vh;
+}
+
+.hero-text{padding-top:4rem;}
+
+.hero-tag{
+  font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:1.5rem;
+  opacity:0;animation:fadeUp .8s .4s forwards;
+}
+
+.hero-greeting{
+  font-family:'Syne',sans-serif;font-size:1rem;
+  color:var(--ghost);font-weight:400;margin-bottom:.5rem;
+  opacity:0;animation:fadeUp .8s .6s forwards;
+}
+
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,6vw,5.5rem);
+  font-weight:900;line-height:.95;
+  color:var(--pale);
+  opacity:0;animation:fadeUp .8s .8s forwards;
+}
+.hero-title .line2{color:var(--yellow);font-style:italic;}
+
+.hero-subtitle{
+  font-size:.85rem;color:var(--ghost);
+  line-height:1.8;margin-top:1.5rem;max-width:420px;
+  opacity:0;animation:fadeUp .8s 1s forwards;
+}
+
+.hero-ctas{
+  display:flex;gap:1.2rem;margin-top:2.5rem;
+  opacity:0;animation:fadeUp .8s 1.2s forwards;
+}
+.btn-primary{
+  background:transparent;border:1px solid var(--amber);
+  color:var(--amber);font-family:'DM Mono',monospace;
+  font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  padding:.85rem 2rem;cursor:none;
+  transition:all .3s;text-decoration:none;
+  position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;
+  background:var(--amber);transform:translateX(-101%);
+  transition:transform .3s;z-index:-1;
+}
+.btn-primary:hover{color:var(--ink);}
+.btn-primary:hover::before{transform:translateX(0);}
+.btn-ghost{
+  color:var(--ghost);font-size:.65rem;letter-spacing:.2em;
+  text-transform:uppercase;text-decoration:none;
+  display:flex;align-items:center;gap:.5rem;
+  transition:color .3s,gap .3s;
+}
+.btn-ghost:hover{color:var(--pale);gap:.9rem;}
+
+/* Hero right — the illustrated character area */
+.hero-visual{
+  position:relative;height:80vh;max-height:700px;
+  display:flex;align-items:center;justify-content:center;
+}
+
+.hero-glow{
+  position:absolute;width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(200,132,58,.18) 0%,transparent 70%);
+  animation:pulse 4s infinite;
+}
+
+.hero-character{
+  position:relative;z-index:2;width:100%;height:100%;
+}
+
+/* Floating rings around character */
+.orbit-ring{
+  position:absolute;border-radius:50%;
+  border:1px solid rgba(200,132,58,.15);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  animation:spin linear infinite;
+}
+.orbit-ring:nth-child(1){width:320px;height:320px;animation-duration:20s;}
+.orbit-ring:nth-child(2){width:450px;height:450px;animation-duration:30s;border-color:rgba(200,132,58,.08);animation-direction:reverse;}
+.orbit-ring:nth-child(3){width:560px;height:560px;animation-duration:45s;border-color:rgba(200,132,58,.05);}
+
+/* Orbiting dots */
+.orbit-dot{
+  position:absolute;width:6px;height:6px;
+  border-radius:50%;background:var(--amber);
+  top:0;left:50%;margin-left:-3px;
+  transform-origin:3px 160px;
+  animation:spin 20s linear infinite;
+  box-shadow:0 0 8px var(--amber);
+}
+
+.hero-scroll-hint{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  z-index:10;text-align:center;
+  opacity:0;animation:fadeIn 1s 2s forwards;
+}
+.hero-scroll-hint span{
+  display:block;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:.5rem;
+}
+.scroll-bar{
+  width:1px;height:50px;
+  background:linear-gradient(to bottom,var(--amber),transparent);
+  margin:0 auto;animation:scrollPulse 2s infinite;
+}
+
+/* ── ABOUT — BENTO GRID ── */
+#about{
+  padding:8rem 5rem;
+  background:linear-gradient(to bottom,var(--ink),var(--fog));
+}
+
+.section-eyebrow{
+  text-align:center;margin-bottom:4rem;
+}
+.eyebrow-tag{
+  font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;color:var(--amber);
+}
+.eyebrow-line{
+  width:50px;height:1px;background:var(--amber);margin:.8rem auto;
+}
+.section-heading{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,4vw,3.2rem);font-weight:900;color:var(--pale);
+}
+.section-heading em{color:var(--yellow);font-style:italic;}
+
+.bento{
+  max-width:1100px;margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:auto;
+  gap:1.2rem;
+}
+
+.bento-card{
+  background:var(--fog);
+  border:1px solid var(--mist);
+  padding:2rem;
+  position:relative;overflow:hidden;
+  transition:border-color .3s,transform .3s;
+}
+.bento-card::before{
+  content:'';position:absolute;top:0;left:0;
+  width:100%;height:2px;
+  background:linear-gradient(to right,var(--amber),transparent);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .4s;
+}
+.bento-card:hover{border-color:var(--dim);transform:translateY(-3px);}
+.bento-card:hover::before{transform:scaleX(1);}
+
+/* Bento layouts */
+.bento-bio    {grid-column:span 5;grid-row:span 2;}
+.bento-code   {grid-column:span 7;}
+.bento-globe  {grid-column:span 7;}
+.bento-stack  {grid-column:span 4;}
+.bento-cta    {grid-column:span 3;background:var(--amber);}
+.bento-currently{grid-column:span 5;}
+.bento-quote  {grid-column:span 12;}
+
+.bento-card-tag{
+  font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:1rem;
+}
+.bento-cta .bento-card-tag{color:var(--ink);}
+
+.bento-card h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.3rem;color:var(--pale);font-weight:700;
+  margin-bottom:.7rem;
+}
+.bento-cta h3{color:var(--ink);}
+
+.bento-card p{
+  color:var(--ghost);font-size:.82rem;line-height:1.7;
+}
+.bento-cta p{color:rgba(0,0,0,.7);}
+
+/* Code terminal in bento */
+.code-block{
+  background:var(--ink);
+  border:1px solid var(--mist);
+  padding:1.2rem;
+  font-size:.7rem;line-height:1.8;
+  margin-top:.8rem;
+  position:relative;overflow:hidden;
+}
+.code-block::before{
+  content:'● ● ●';
+  position:absolute;top:.7rem;left:1rem;
+  font-size:.5rem;color:var(--dim);letter-spacing:.3em;
+}
+.code-block pre{margin-top:1rem;color:var(--ghost);}
+.code-kw{color:var(--amber);}
+.code-str{color:var(--yellow);}
+.code-fn{color:#a0c8a0;}
+.code-cm{color:var(--dim);}
+.code-var{color:#c8a0d0;}
+
+/* Globe SVG */
+.globe-wrap{
+  display:flex;align-items:center;justify-content:center;
+  padding:.5rem 0;
+}
+
+/* Tech stack pills */
+.tech-pills{
+  display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem;
+}
+.tech-pill{
+  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.3rem .7rem;
+  border:1px solid var(--mist);
+  color:var(--ghost);background:var(--ink);
+  transition:border-color .3s,color .3s;
+}
+.tech-pill:hover{border-color:var(--amber);color:var(--amber);}
+
+.copy-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(0,0,0,.2);border:1px solid rgba(0,0,0,.3);
+  color:var(--ink);font-family:'DM Mono',monospace;
+  font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  padding:.6rem 1.2rem;cursor:none;margin-top:1.2rem;
+  transition:background .3s;
+}
+.copy-btn:hover{background:rgba(0,0,0,.35);}
+
+.bento-quote{
+  text-align:center;
+  background:var(--ink) !important;
+  border-color:var(--mist) !important;
+  padding:2.5rem !important;
+}
+.bento-quote blockquote{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1rem,2.5vw,1.5rem);
+  font-style:italic;color:var(--ghost);
+}
+.bento-quote blockquote span{color:var(--amber);}
+
+/* ── SKILLS ── */
+#skills{
+  padding:8rem 5rem;
+  background:var(--fog);
+}
+
+.skills-grid{
+  max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+}
+
+.skill-card{
+  background:var(--ink);border:1px solid var(--mist);
+  padding:2rem;position:relative;overflow:hidden;
+  transition:transform .3s,border-color .3s;
+}
+.skill-card:hover{transform:translateY(-4px);border-color:var(--dim);}
+
+.skill-icon{font-size:1.8rem;margin-bottom:1rem;}
+.skill-name{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:1rem;color:var(--pale);margin-bottom:1rem;
+}
+
+.skill-bar-wrap{margin-bottom:.4rem;}
+.skill-bar-label{
+  display:flex;justify-content:space-between;
+  font-size:.6rem;color:var(--ghost);letter-spacing:.1em;margin-bottom:.3rem;
+}
+.skill-bar-track{
+  height:2px;background:var(--mist);position:relative;
+}
+.skill-bar-fill{
+  height:100%;background:linear-gradient(to right,var(--amber),var(--yellow));
+  width:0;transition:width 1.5s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── PROJECTS ── */
+#projects{
+  padding:8rem 5rem;
+  background:linear-gradient(to bottom,var(--fog),var(--ink));
+}
+
+.projects-grid{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:1.8rem;
+}
+
+.proj-card{
+  background:var(--fog);border:1px solid var(--mist);
+  overflow:hidden;position:relative;
+  transition:transform .4s,border-color .4s;
+}
+.proj-card:first-child{grid-column:span 2;}
+.proj-last{grid-column:span 2;}
+.proj-card:hover{transform:translateY(-5px);border-color:var(--dim);}
+
+.proj-visual{
+  width:100%;aspect-ratio:16/8;
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.proj-card:not(:first-child) .proj-visual{aspect-ratio:16/9;}
+
+.proj-num{
+  position:absolute;top:1rem;left:1.2rem;
+  font-size:.6rem;letter-spacing:.2em;color:var(--amber);z-index:2;
+}
+.proj-type-badge{
+  position:absolute;top:1rem;right:1.2rem;
+  font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;
+  padding:.3rem .7rem;background:rgba(200,132,58,.15);
+  border:1px solid rgba(200,132,58,.3);color:var(--amber);
+  z-index:2;
+}
+
+.proj-body{padding:1.8rem;}
+.proj-tag{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--amber);margin-bottom:.6rem;}
+.proj-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.4rem;color:var(--pale);font-weight:700;margin-bottom:.7rem;
+}
+.proj-desc{color:var(--ghost);font-size:.8rem;line-height:1.75;margin-bottom:1.2rem;}
+.proj-stack{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.2rem;}
+.proj-stack span{
+  font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.25rem .6rem;background:var(--mist);
+  border:1px solid var(--dim);color:var(--ghost);
+}
+.proj-link{
+  color:var(--yellow);text-decoration:none;
+  font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:.4rem;
+  transition:gap .3s;
+}
+.proj-link:hover{gap:.8rem;}
+
+/* ── CONTACT ── */
+#contact{
+  min-height:100vh;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ink);overflow:hidden;
+}
+
+#star-canvas{position:absolute;inset:0;z-index:0;}
+
+.contact-card{
+  position:relative;z-index:10;
+  background:rgba(17,14,9,.92);
+  border:1px solid var(--mist);
+  padding:3.5rem;
+  width:100%;max-width:540px;
+  backdrop-filter:blur(10px);
+}
+
+.contact-card h2{
+  font-family:'Playfair Display',serif;
+  font-size:2.5rem;font-weight:900;color:var(--pale);
+  margin-bottom:.8rem;
+}
+.contact-card h2 em{color:var(--yellow);font-style:italic;}
+
+.contact-card .sub{
+  color:var(--ghost);font-size:.82rem;line-height:1.7;
+  margin-bottom:2.5rem;
+}
+
+.form-field{margin-bottom:1.4rem;}
+.form-field label{
+  display:block;font-size:.6rem;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--amber);margin-bottom:.5rem;
+}
+.form-field input,
+.form-field textarea{
+  width:100%;background:rgba(42,31,20,.5);
+  border:1px solid var(--mist);
+  padding:.9rem 1.1rem;
+  color:var(--pale);font-family:'DM Mono',monospace;
+  font-size:.82rem;outline:none;resize:none;
+  transition:border-color .3s,background .3s;
+}
+.form-field input:focus,
+.form-field textarea:focus{
+  border-color:var(--amber);
+  background:rgba(42,31,20,.8);
+}
+
+.send-btn{
+  width:100%;
+  background:var(--amber);
+  border:none;color:var(--ink);
+  font-family:'DM Mono',monospace;
+  font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;
+  padding:1.1rem;cursor:none;
+  transition:background .3s,transform .2s;
+  font-weight:700;
+}
+.send-btn:hover{background:var(--gold);transform:translateY(-2px);}
+
+.contact-socials{
+  display:flex;justify-content:center;gap:2rem;
+  margin-top:2rem;padding-top:1.5rem;
+  border-top:1px solid var(--mist);
+}
+.contact-socials a{
+  color:var(--ghost);text-decoration:none;
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  transition:color .3s;
+}
+.contact-socials a:hover{color:var(--yellow);}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--ink);border-top:1px solid var(--mist);
+  padding:1.8rem 5rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+footer span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(25px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.08);opacity:.7;}}
+@keyframes spin{from{transform:translate(-50%,-50%) rotate(0deg);}to{transform:translate(-50%,-50%) rotate(360deg);}}
+@keyframes scrollPulse{0%,100%{opacity:.3;}50%{opacity:1;}}
+@keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
+
+.reveal{opacity:0;transform:translateY(35px);transition:opacity .8s ease,transform .8s ease;}
+.reveal.visible{opacity:1;transform:none;}
+.rd1{transition-delay:.1s;}
+.rd2{transition-delay:.2s;}
+.rd3{transition-delay:.3s;}
+.rd4{transition-delay:.4s;}
+.rd5{transition-delay:.5s;}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem;}
+  nav ul{gap:1.5rem;}
+  .hero-layout{grid-template-columns:1fr;padding:0 1.5rem;text-align:center;}
+  .hero-visual{height:50vw;max-height:350px;}
+  .hero-subtitle,.hero-ctas{margin-left:auto;margin-right:auto;}
+  .hero-ctas{justify-content:center;}
+  #about,#skills,#projects,#contact{padding:5rem 1.5rem;}
+  .bento{grid-template-columns:1fr 1fr;}
+  .bento-bio,.bento-code,.bento-globe,.bento-stack,.bento-cta,.bento-currently,.bento-quote{grid-column:span 2;}
+  .skills-grid,.projects-grid{grid-template-columns:1fr;}
+  .proj-card:first-child{grid-column:span 1;}
+  .proj-last{grid-column:span 1 !important;}
+  .proj-visual{aspect-ratio:16/7 !important;min-height:120px;}
+  .proj-card:not(:first-child) .proj-visual{aspect-ratio:16/7 !important;}
+  footer{flex-direction:column;gap:1rem;text-align:center;padding:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">A<span>.</span>Sharma</a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+
+  <div class="hero-layout">
+    <!-- LEFT: Text -->
+    <div class="hero-text">
+      <p class="hero-tag">Backend Engineer · Game Developer · B.Tech EEE</p>
+      <p class="hero-greeting">Hi, I'm</p>
+      <h1 class="hero-title">
+        Akshat<br>
+        <span class="line2">Sharma</span>
+      </h1>
+      <p class="hero-subtitle">
+        A backend engineer who wandered in from the world of circuits — 
+        now building scalable systems by day and haunted game worlds by night.
+      </p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn-primary">View My Work</a>
+        <a href="#contact" class="btn-ghost">Let's Talk →</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: Illustrated character -->
+    <div class="hero-visual">
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="orbit-ring"></div>
+      <div class="orbit-ring"></div>
+      <div class="hero-glow"></div>
+      <svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:relative;z-index:2;">
+        <defs>
+          <radialGradient id="charGlow" cx="50%" cy="65%" r="40%">
+            <stop offset="0%" stop-color="#c8843a" stop-opacity=".35"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+          <filter id="soft"><feGaussianBlur stdDeviation="4"/></filter>
+          <filter id="softer"><feGaussianBlur stdDeviation="10"/></filter>
+          <radialGradient id="groundGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#c8843a" stop-opacity=".2"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Ground glow -->
+        <ellipse cx="250" cy="510" rx="120" ry="30" fill="url(#groundGlow)" filter="url(#softer)"/>
+        
+        <!-- Background fog -->
+        <ellipse cx="250" cy="500" rx="200" ry="50" fill="#1a1510" opacity=".6"/>
+        
+        <!-- Distant arch/ruin -->
+        <path d="M80 500 L80 300 Q80 280 100 280 Q120 280 120 300 L120 500" fill="none" stroke="#1e1710" stroke-width="3"/>
+        <path d="M80 300 Q100 250 120 300" fill="none" stroke="#1e1710" stroke-width="2.5"/>
+        <path d="M370 500 L370 320 Q370 295 390 295 Q410 295 410 320 L410 500" fill="none" stroke="#1e1710" stroke-width="3"/>
+        <path d="M370 320 Q390 265 410 320" fill="none" stroke="#1e1710" stroke-width="2.5"/>
+
+        <!-- Light beam from lantern -->
+        <path d="M215 380 L160 500 L260 500 Z" fill="url(#charGlow)" opacity=".4"/>
+
+        <!-- Character — Little Nightmares style: small cloaked child -->
+        <!-- Shadow -->
+        <ellipse cx="250" cy="508" rx="45" ry="10" fill="#000" opacity=".5"/>
+        
+        <!-- Legs -->
+        <rect x="232" y="450" width="14" height="50" rx="5" fill="#1a1510"/>
+        <rect x="252" y="450" width="14" height="52" rx="5" fill="#151008"/>
+        <!-- Boots -->
+        <path d="M232 495 Q225 505 228 510 L246 510 L246 495Z" fill="#0d0806"/>
+        <path d="M252 497 Q245 507 248 512 L266 512 L266 497Z" fill="#0d0806"/>
+        
+        <!-- Body / raincoat -->
+        <path d="M220 320 Q218 360 222 400 Q232 430 250 435 Q268 430 278 400 Q282 360 280 320 Q265 305 250 305 Q235 305 220 320Z" fill="#2a1e14"/>
+        
+        <!-- Hood -->
+        <path d="M225 320 Q230 280 250 275 Q270 280 275 320 Q265 310 250 308 Q235 310 225 320Z" fill="#1e1510"/>
+        
+        <!-- Head -->
+        <ellipse cx="250" cy="295" rx="22" ry="23" fill="#2a1e14"/>
+        <!-- Face shadow / dark under hood -->
+        <path d="M228 290 Q230 305 250 308 Q270 305 272 290 Q260 296 250 296 Q240 296 228 290Z" fill="#0d0806" opacity=".7"/>
+        <!-- Eyes — faint yellow glow -->
+        <ellipse cx="243" cy="292" rx="3" ry="2.5" fill="#f5c842" opacity=".6">
+          <animate attributeName="opacity" values=".6;.2;.6" dur="3s" repeatCount="indefinite"/>
+        </ellipse>
+        <ellipse cx="257" cy="292" rx="3" ry="2.5" fill="#f5c842" opacity=".6">
+          <animate attributeName="opacity" values=".6;.2;.6" dur="3s" begin=".5s" repeatCount="indefinite"/>
+        </ellipse>
+        
+        <!-- Left arm holding lantern -->
+        <path d="M222 340 Q205 355 200 375" stroke="#2a1e14" stroke-width="10" stroke-linecap="round" fill="none"/>
+        <!-- Right arm down -->
+        <path d="M278 340 Q290 360 285 380" stroke="#2a1e14" stroke-width="10" stroke-linecap="round" fill="none"/>
+        
+        <!-- Lantern (held) -->
+        <rect x="188" y="370" width="18" height="22" rx="3" fill="#150f08" stroke="#c8843a" stroke-width="1.2"/>
+        <rect x="192" y="374" width="10" height="14" rx="1.5" fill="#f5c842" opacity=".85">
+          <animate attributeName="opacity" values=".85;.4;.85" dur="2s" repeatCount="indefinite"/>
+        </rect>
+        <!-- Lantern glow -->
+        <ellipse cx="197" cy="381" rx="20" ry="18" fill="#c8843a" opacity=".2" filter="url(#soft)">
+          <animate attributeName="opacity" values=".2;.08;.2" dur="2s" repeatCount="indefinite"/>
+        </ellipse>
+        <line x1="197" y1="370" x2="197" y2="362" stroke="#c8843a" stroke-width="1.5"/>
+        
+        <!-- Floating code particles around character -->
+        <text x="310" y="350" font-family="DM Mono, monospace" font-size="9" fill="#4a3828" opacity=".7">
+          <animate attributeName="opacity" values=".7;.2;.7" dur="4s" repeatCount="indefinite"/>
+          {`server.listen()`}
+        </text>
+        <text x="100" y="310" font-family="DM Mono, monospace" font-size="8" fill="#4a3828" opacity=".5">
+          <animate attributeName="opacity" values=".5;.1;.5" dur="5s" repeatCount="indefinite"/>
+          async/await
+        </text>
+        <text x="320" y="420" font-family="DM Mono, monospace" font-size="8" fill="#4a3828" opacity=".5">
+          <animate attributeName="opacity" values=".5;.15;.5" dur="3.5s" repeatCount="indefinite"/>
+          GameLoop()
+        </text>
+        <text x="90" y="420" font-family="DM Mono, monospace" font-size="7" fill="#4a3828" opacity=".4">
+          <animate attributeName="opacity" values=".4;.1;.4" dur="6s" repeatCount="indefinite"/>
+          pg.connect()
+        </text>
+
+        <!-- Ambient floating particles -->
+        <circle cx="170" cy="250" r="2" fill="#c8843a" opacity=".5">
+          <animate attributeName="cy" values="250;200;250" dur="4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values=".5;0;.5" dur="4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="330" cy="280" r="1.5" fill="#f5c842" opacity=".4">
+          <animate attributeName="cy" values="280;220;280" dur="5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values=".4;0;.4" dur="5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="200" cy="200" r="1" fill="#c8843a" opacity=".3">
+          <animate attributeName="cy" values="200;160;200" dur="6s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values=".3;0;.3" dur="6s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="300" cy="180" r="1.5" fill="#c8843a" opacity=".35">
+          <animate attributeName="cy" values="180;130;180" dur="4.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values=".35;0;.35" dur="4.5s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <div class="scroll-bar"></div>
+    <span>Descend</span>
+  </div>
+</section>
+
+<!-- ══════════ ABOUT — BENTO ══════════ -->
+<section id="about">
+  <div class="section-eyebrow reveal">
+    <p class="eyebrow-tag">Who I Am</p>
+    <div class="eyebrow-line"></div>
+    <h2 class="section-heading">About <em>Me</em></h2>
+  </div>
+
+  <div class="bento">
+    <!-- Bio card -->
+    <div class="bento-card bento-bio reveal">
+      <p class="bento-card-tag">// bio.txt</p>
+      <h3>Hi, I'm Akshat Sharma</h3>
+      <p>Over the last few years I've built backend systems that handle real load — APIs, databases, websockets, the whole stack. My B.Tech in EEE gives me an engineer's instinct: I think in systems, signals, and states.</p>
+      <br>
+      <p>Outside of work, I'm chasing a dream of making atmospheric game worlds — the kind that feel alive even in silence. <em style="color:var(--amber)">Little Nightmares</em> energy.</p>
+      <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--mist);display:flex;gap:2rem;">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--yellow);font-weight:900;">2+</div>
+          <div style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);">Years Building</div>
+        </div>
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--yellow);font-weight:900;">EEE</div>
+          <div style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);">B.Tech Degree</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code snippet -->
+    <div class="bento-card bento-code reveal rd1">
+      <p class="bento-card-tag">// akshat.config.ts</p>
+      <div class="code-block">
+        <pre>
+<span class="code-kw">const</span> <span class="code-var">akshat</span> = {
+  <span class="code-fn">role</span>: <span class="code-str">"Backend Engineer"</span>,
+  <span class="code-fn">passion</span>: <span class="code-str">"Game Development"</span>,
+  <span class="code-fn">degree</span>: <span class="code-str">"B.Tech EEE"</span>,
+  <span class="code-fn">stack</span>: [<span class="code-str">"Node.js"</span>, <span class="code-str">"Python"</span>, <span class="code-str">"PostgreSQL"</span>],
+  <span class="code-fn">currentlyBuilding</span>: <span class="code-str">"something dark"</span>,
+  <span class="code-cm">// open to: collabs, full-time, game jams</span>
+};</pre>
+      </div>
+    </div>
+
+    <!-- Globe / timezone -->
+    <div class="bento-card bento-globe reveal rd2">
+      <p class="bento-card-tag">// timezone</p>
+      <h3 style="font-size:1rem;">Time Zone</h3>
+      <p style="font-size:.75rem;margin-bottom:.8rem;">Based in India (IST UTC+5:30). Open to remote work worldwide.</p>
+      <div class="globe-wrap">
+        <svg viewBox="0 0 160 160" width="130" height="130" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="globeGlow" cx="40%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#2a1f14"/>
+              <stop offset="100%" stop-color="#0d0806"/>
+            </radialGradient>
+          </defs>
+          <circle cx="80" cy="80" r="65" fill="url(#globeGlow)" stroke="#2a1f14" stroke-width="1.5"/>
+          <!-- Latitude lines -->
+          <ellipse cx="80" cy="80" rx="65" ry="20" fill="none" stroke="#2a1f14" stroke-width="1"/>
+          <ellipse cx="80" cy="80" rx="65" ry="40" fill="none" stroke="#2a1f14" stroke-width=".8"/>
+          <ellipse cx="80" cy="80" rx="65" ry="55" fill="none" stroke="#1e1710" stroke-width=".7"/>
+          <!-- Longitude lines -->
+          <line x1="80" y1="15" x2="80" y2="145" stroke="#2a1f14" stroke-width="1"/>
+          <ellipse cx="80" cy="80" rx="32" ry="65" fill="none" stroke="#1e1710" stroke-width=".8"/>
+          <ellipse cx="80" cy="80" rx="55" ry="65" fill="none" stroke="#1e1710" stroke-width=".7"/>
+          <!-- India dot -->
+          <circle cx="108" cy="75" r="4" fill="#c8843a" opacity=".9">
+            <animate attributeName="opacity" values=".9;.3;.9" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="108" cy="75" r="10" fill="#c8843a" opacity=".2">
+            <animate attributeName="r" values="10;16;10" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values=".2;0;.2" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Outer glow ring -->
+          <circle cx="80" cy="80" r="70" fill="none" stroke="#c8843a" stroke-width=".5" opacity=".3"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Tech stack -->
+    <div class="bento-card bento-stack reveal rd3">
+      <p class="bento-card-tag">// stack</p>
+      <h3 style="font-size:1rem;">Tech Stack</h3>
+      <p style="font-size:.75rem;margin-bottom:.5rem;">Languages, frameworks & tools I wield.</p>
+      <div class="tech-pills">
+        <span class="tech-pill">Node.js</span>
+        <span class="tech-pill">Python</span>
+        <span class="tech-pill">TypeScript</span>
+        <span class="tech-pill">PostgreSQL</span>
+        <span class="tech-pill">Redis</span>
+        <span class="tech-pill">Docker</span>
+        <span class="tech-pill">Unity</span>
+        <span class="tech-pill">C#</span>
+        <span class="tech-pill">WebSockets</span>
+        <span class="tech-pill">AWS</span>
+      </div>
+    </div>
+
+    <!-- CTA card -->
+    <div class="bento-card bento-cta reveal rd4">
+      <p class="bento-card-tag">// hire_me</p>
+      <h3 style="font-size:1.1rem;">Want to start a project together?</h3>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('akshatsharma31109@gmail.com');this.textContent='✓ Copied!'">
+        ⊕ Copy Email Address
+      </button>
+    </div>
+
+
+    <!-- Currently block -->
+    <div class="bento-card bento-currently reveal rd4">
+      <p class="bento-card-tag">// currently</p>
+      <h3 style="font-size:1rem;">What I'm Up To</h3>
+      <p style="font-size:.75rem;line-height:1.7;color:var(--ghost);margin-top:.6rem;">Building backend systems by day, crafting atmospheric game worlds by night. Currently exploring procedural generation & AI-driven NPC behaviour.</p>
+      <div style="margin-top:1.2rem;display:flex;align-items:center;gap:.6rem;">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--amber);display:inline-block;animation:pulse 2s infinite;"></span>
+        <span style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);">Available for freelance</span>
+      </div>
+    </div>
+
+    <!-- Quote -->
+    <div class="bento-card bento-quote reveal">
+      <blockquote>
+        "The best backends are like the best horror games — <span>you never see the machinery, only feel it.</span>"
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SKILLS ══════════ -->
+<section id="skills">
+  <div class="section-eyebrow reveal">
+    <p class="eyebrow-tag">What I Wield</p>
+    <div class="eyebrow-line"></div>
+    <h2 class="section-heading">My <em>Arsenal</em></h2>
+  </div>
+  <div class="skills-grid">
+    <!-- Java / Spring Boot Backend -->
+    <div class="skill-card reveal">
+      <div class="skill-icon">☕</div>
+      <div class="skill-name">Backend Systems</div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>Java</span><span>82%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="82"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>Spring Boot</span><span>78%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="78"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>REST APIs</span><span>85%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="85"></div></div>
+      </div>
+    </div>
+    <!-- Databases -->
+    <div class="skill-card reveal rd1">
+      <div class="skill-icon">🗄️</div>
+      <div class="skill-name">Databases</div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>MySQL</span><span>80%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="80"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>JPA / Hibernate</span><span>75%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="75"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>PostgreSQL</span><span>70%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="70"></div></div>
+      </div>
+    </div>
+    <!-- Game Dev -->
+    <div class="skill-card reveal rd2">
+      <div class="skill-icon">🎮</div>
+      <div class="skill-name">Game Dev</div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>Unity</span><span>78%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="78"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>C#</span><span>75%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="75"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>Game Design</span><span>70%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="70"></div></div>
+      </div>
+    </div>
+    <!-- DevOps / Tools -->
+    <div class="skill-card reveal rd3">
+      <div class="skill-icon">🐳</div>
+      <div class="skill-name">DevOps / Tools</div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>Docker</span><span>78%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="78"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>Maven</span><span>75%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="75"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>IntelliJ / VS Code</span><span>85%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="85"></div></div>
+      </div>
+    </div>
+    <!-- EEE / Embedded -->
+    <div class="skill-card reveal rd4">
+      <div class="skill-icon">⚡</div>
+      <div class="skill-name">EEE & Embedded</div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>C / C++ (Arduino)</span><span>72%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="72"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>ESP32 / Arduino</span><span>75%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="75"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>Circuit & Sensors</span><span>68%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="68"></div></div>
+      </div>
+    </div>
+    <!-- DSA / CS Fundamentals -->
+    <div class="skill-card reveal rd5">
+      <div class="skill-icon">🧠</div>
+      <div class="skill-name">DSA & CS Core</div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>Data Structures</span><span>78%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="78"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>Algorithms</span><span>75%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="75"></div></div>
+      </div>
+      <div class="skill-bar-wrap">
+        <div class="skill-bar-label"><span>OOP / Design Patterns</span><span>80%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-w="80"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PROJECTS ══════════ -->
+<section id="projects">
+  <div class="section-eyebrow reveal">
+    <p class="eyebrow-tag">What I've Built</p>
+    <div class="eyebrow-line"></div>
+    <h2 class="section-heading">The <em>Archives</em></h2>
+  </div>
+  <div class="projects-grid">
+
+    <!-- Project 1: Spring Boot Task Manager — Featured -->
+    <div class="proj-card reveal">
+      <div class="proj-visual">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0a0604,#1a1510,#2a1a10);"></div>
+        <svg style="position:relative;z-index:2;width:80%;max-height:180px;" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
+          <defs><radialGradient id="javaglow" cx="20%" cy="50%" r="40%"><stop offset="0%" stop-color="#c8843a" stop-opacity=".2"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs>
+          <rect width="600" height="180" fill="url(#javaglow)"/>
+          <!-- Spring Boot leaf icon outline -->
+          <path d="M60 90 Q60 40 110 40 Q155 40 155 90 Q155 140 110 140 Q60 140 60 90Z" fill="none" stroke="#4a6a3a" stroke-width="1.5" opacity=".6"/>
+          <path d="M75 90 Q80 60 110 58 Q138 58 140 90 Q140 122 110 122 Q80 122 75 90Z" fill="none" stroke="#c8843a" stroke-width="1" opacity=".4"/>
+          <text x="110" y="96" font-family="DM Mono,monospace" font-size="11" fill="#c8843a" text-anchor="middle" opacity=".9">SB</text>
+          <!-- REST flow -->
+          <text x="175" y="60" font-family="DM Mono,monospace" font-size="9" fill="#4a3828">POST /tasks</text>
+          <text x="175" y="80" font-family="DM Mono,monospace" font-size="9" fill="#4a3828">GET  /tasks/{id}</text>
+          <text x="175" y="100" font-family="DM Mono,monospace" font-size="9" fill="#c8843a" opacity=".8">PUT  /tasks/{id}</text>
+          <text x="175" y="120" font-family="DM Mono,monospace" font-size="9" fill="#4a3828">DEL  /tasks/{id}</text>
+          <!-- Arrow to DB -->
+          <line x1="340" y1="90" x2="400" y2="90" stroke="#2a1f14" stroke-width="1" stroke-dasharray="4,4"/>
+          <circle cx="370" cy="90" r="3" fill="#c8843a" opacity=".4"/>
+          <!-- MySQL cylinder -->
+          <ellipse cx="440" cy="70" rx="35" ry="10" fill="none" stroke="#2a1f14" stroke-width="1.5"/>
+          <rect x="405" y="70" width="70" height="42" fill="none" stroke="#2a1f14" stroke-width="1.5"/>
+          <ellipse cx="440" cy="112" rx="35" ry="10" fill="none" stroke="#2a1f14" stroke-width="1.5"/>
+          <text x="440" y="96" font-family="DM Mono,monospace" font-size="8" fill="#4a3828" text-anchor="middle">MySQL</text>
+          <!-- Docker badge -->
+          <rect x="500" y="30" width="70" height="22" rx="3" fill="none" stroke="#2a1f14" stroke-width="1"/>
+          <text x="535" y="45" font-family="DM Mono,monospace" font-size="8" fill="#4a5a8a" text-anchor="middle" opacity=".8">Docker</text>
+          <!-- Render badge -->
+          <rect x="500" y="58" width="70" height="22" rx="3" fill="none" stroke="#2a1f14" stroke-width="1"/>
+          <text x="535" y="73" font-family="DM Mono,monospace" font-size="8" fill="#4a8a5a" text-anchor="middle" opacity=".8">Render ↗</text>
+          <text x="30" y="168" font-family="DM Mono,monospace" font-size="8" fill="#4a3828">// live in production</text>
+        </svg>
+        <div class="proj-num">01 / Featured</div>
+        <div class="proj-type-badge">Backend</div>
+      </div>
+      <div class="proj-body">
+        <p class="proj-tag">REST API · Java · Production</p>
+        <h3 class="proj-title">Task Manager REST API</h3>
+        <p class="proj-desc">My first deployed Spring Boot REST API — full CRUD with layered architecture, JPA/Hibernate ORM, input validation, and automatic timestamps. Dockerized and live on Render.</p>
+        <div class="proj-stack"><span>Java</span><span>Spring Boot</span><span>MySQL</span><span>Docker</span><span>Maven</span><span>Render</span></div>
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap;">
+          <a href="https://github.com/Aksh-attt/task-manager-api" target="_blank" class="proj-link">GitHub →</a>
+          <a href="https://lnkd.in/gbrj6xvT" target="_blank" class="proj-link" style="color:var(--amber);border-color:var(--amber);">Live API →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2: GPS Solar Tracker -->
+    <div class="proj-card reveal rd1">
+      <div class="proj-visual">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#060a04,#101a08,#1a2a10);"></div>
+        <svg style="position:relative;z-index:2;width:60%;height:80%;" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+          <!-- Sun -->
+          <circle cx="100" cy="50" r="18" fill="none" stroke="#f5c842" stroke-width="1.5" opacity=".7"/>
+          <circle cx="100" cy="50" r="10" fill="#f5c842" opacity=".2"/>
+          <!-- Sun rays -->
+          <line x1="100" y1="25" x2="100" y2="18" stroke="#f5c842" stroke-width="1" opacity=".5"/>
+          <line x1="120" y1="30" x2="125" y2="24" stroke="#f5c842" stroke-width="1" opacity=".5"/>
+          <line x1="75" y1="30" x2="70" y2="24" stroke="#f5c842" stroke-width="1" opacity=".5"/>
+          <line x1="122" y1="50" x2="130" y2="50" stroke="#f5c842" stroke-width="1" opacity=".5"/>
+          <line x1="70" y1="50" x2="62" y2="50" stroke="#f5c842" stroke-width="1" opacity=".5"/>
+          <!-- Dual axis mount -->
+          <line x1="100" y1="120" x2="100" y2="80" stroke="#2a1f14" stroke-width="2.5"/>
+          <line x1="75" y1="80" x2="125" y2="80" stroke="#c8843a" stroke-width="2" opacity=".8"/>
+          <!-- Solar panel -->
+          <rect x="72" y="68" width="56" height="28" rx="2" fill="none" stroke="#c8843a" stroke-width="1.5" opacity=".7"/>
+          <line x1="86" y1="68" x2="86" y2="96" stroke="#c8843a" stroke-width=".8" opacity=".4"/>
+          <line x1="100" y1="68" x2="100" y2="96" stroke="#c8843a" stroke-width=".8" opacity=".4"/>
+          <line x1="114" y1="68" x2="114" y2="96" stroke="#c8843a" stroke-width=".8" opacity=".4"/>
+          <line x1="72" y1="82" x2="128" y2="82" stroke="#c8843a" stroke-width=".8" opacity=".4"/>
+          <!-- GPS chip -->
+          <rect x="30" y="110" width="35" height="25" rx="2" fill="none" stroke="#4a8a9a" stroke-width="1.2"/>
+          <text x="47" y="127" font-family="DM Mono,monospace" font-size="7" fill="#4a8a9a" text-anchor="middle">NEO-6M</text>
+          <!-- ESP32 chip -->
+          <rect x="135" y="110" width="35" height="25" rx="2" fill="none" stroke="#3a6a8a" stroke-width="1.2"/>
+          <text x="152" y="127" font-family="DM Mono,monospace" font-size="7" fill="#3a6a8a" text-anchor="middle">ESP32</text>
+          <!-- Connect line -->
+          <line x1="65" y1="122" x2="100" y2="122" stroke="#2a1f14" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="100" y1="122" x2="135" y2="122" stroke="#2a1f14" stroke-width="1" stroke-dasharray="3,3"/>
+        </svg>
+        <div class="proj-num">02</div>
+        <div class="proj-type-badge">Embedded</div>
+      </div>
+      <div class="proj-body">
+        <p class="proj-tag">Embedded Systems · Renewable Energy</p>
+        <h3 class="proj-title">GPS Dual-Axis Solar Tracker</h3>
+        <p class="proj-desc">GPS-driven solar tracker that computes real-time azimuth & elevation using latitude/longitude from a NEO-6M module. Drives dual-axis MG995 servos via ESP32 — no light sensors needed.</p>
+        <div class="proj-stack"><span>ESP32</span><span>C/C++</span><span>NEO-6M GPS</span><span>MG995 Servos</span><span>Python</span></div>
+        <a href="https://www.linkedin.com/posts/akshat-sharma-02b48235b_embeddedsystems-solartracking-gps-activity-7400186119465615360-zP_v" target="_blank" class="proj-link">View Post →</a>
+      </div>
+    </div>
+
+    <!-- Project 3: Forensick Game -->
+    <div class="proj-card reveal rd2">
+      <div class="proj-visual">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#080606,#180810,#0d0a08);"></div>
+        <svg style="position:relative;z-index:2;width:55%;height:80%;" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+          <defs><radialGradient id="gameGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c8843a" stop-opacity=".15"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs>
+          <ellipse cx="100" cy="110" rx="65" ry="18" fill="url(#gameGlow)"/>
+          <!-- Magnifying glass / forensic -->
+          <circle cx="85" cy="72" r="28" fill="none" stroke="#c8843a" stroke-width="2" opacity=".7"/>
+          <circle cx="85" cy="72" r="20" fill="none" stroke="#2a1f14" stroke-width="1"/>
+          <line x1="106" y1="93" x2="125" y2="112" stroke="#c8843a" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+          <!-- Question mark inside -->
+          <text x="85" y="80" font-family="Playfair Display,serif" font-size="22" fill="#c8843a" text-anchor="middle" opacity=".6">?</text>
+          <!-- Skull outline faint -->
+          <circle cx="150" cy="55" r="14" fill="none" stroke="#2a1f14" stroke-width="1" opacity=".5"/>
+          <rect x="143" y="63" width="14" height="8" rx="2" fill="none" stroke="#2a1f14" stroke-width="1" opacity=".5"/>
+          <text x="30" y="148" font-family="DM Mono,monospace" font-size="8" fill="#4a3828">// forensick.exe</text>
+        </svg>
+        <div class="proj-num">03</div>
+        <div class="proj-type-badge">Game Dev</div>
+      </div>
+      <div class="proj-body">
+        <p class="proj-tag">Unity · Mystery · Atmosphere</p>
+        <h3 class="proj-title">Forensick</h3>
+        <p class="proj-desc">An atmospheric mystery game built in Unity. Investigate crime scenes, uncover clues, and piece together what happened — where the environment itself tells the story.</p>
+        <div class="proj-stack"><span>Unity</span><span>C#</span><span>IntelliJ</span><span>VS Code</span></div>
+        <a href="https://github.com/Aksh-attt/Forensick" target="_blank" class="proj-link">View on GitHub →</a>
+      </div>
+    </div>
+
+    <!-- Project 4: SIH Hackathon -->
+    <div class="proj-card reveal rd3 proj-last">
+      <div class="proj-visual">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#040a0d,#081018,#0a1420);"></div>
+        <svg style="position:relative;z-index:2;width:60%;height:80%;" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+          <defs><radialGradient id="cloudGlow" cx="50%" cy="40%" r="50%"><stop offset="0%" stop-color="#4a8aaa" stop-opacity=".2"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs>
+          <rect width="200" height="160" fill="url(#cloudGlow)"/>
+          <!-- Cloud shape -->
+          <circle cx="80" cy="55" r="22" fill="none" stroke="#3a6a8a" stroke-width="1.5" opacity=".7"/>
+          <circle cx="105" cy="48" r="18" fill="none" stroke="#3a6a8a" stroke-width="1.5" opacity=".7"/>
+          <circle cx="125" cy="58" r="15" fill="none" stroke="#3a6a8a" stroke-width="1.5" opacity=".7"/>
+          <line x1="65" y1="70" x2="135" y2="70" stroke="#3a6a8a" stroke-width="1.5" opacity=".5"/>
+          <!-- Firebase icon rough -->
+          <text x="100" y="100" font-family="DM Mono,monospace" font-size="8" fill="#c8843a" text-anchor="middle" opacity=".7">Firebase</text>
+          <!-- MOSFET symbol rough -->
+          <line x1="40" y1="110" x2="40" y2="148" stroke="#2a1f14" stroke-width="1.5"/>
+          <line x1="48" y1="114" x2="48" y2="144" stroke="#c8843a" stroke-width="2" opacity=".6"/>
+          <line x1="48" y1="114" x2="65" y2="108" stroke="#2a1f14" stroke-width="1"/>
+          <line x1="48" y1="129" x2="65" y2="129" stroke="#2a1f14" stroke-width="1"/>
+          <line x1="48" y1="144" x2="65" y2="150" stroke="#2a1f14" stroke-width="1"/>
+          <text x="70" y="130" font-family="DM Mono,monospace" font-size="7" fill="#4a3828">MOSFET</text>
+          <!-- Arduino -->
+          <rect x="130" y="108" width="45" height="30" rx="3" fill="none" stroke="#2a6a4a" stroke-width="1.2"/>
+          <text x="152" y="128" font-family="DM Mono,monospace" font-size="7" fill="#2a6a4a" text-anchor="middle">Arduino</text>
+          <text x="30" y="20" font-family="DM Mono,monospace" font-size="7" fill="#4a3828">// SIH 2025 — Team Capacitor Crew</text>
+        </svg>
+        <div class="proj-num">04</div>
+        <div class="proj-type-badge">Hackathon</div>
+      </div>
+      <div class="proj-body">
+        <p class="proj-tag">Smart India Hackathon · IoT · Cloud</p>
+        <h3 class="proj-title">Renewable Energy Monitoring System</h3>
+        <p class="proj-desc">Built for SIH 2025 representing GCET. A cloud-based monitoring app paired with hardware (MOSFETs + Arduino Nano) for real-time tracking of renewable energy in microgrids.</p>
+        <div class="proj-stack"><span>Firebase</span><span>Python</span><span>Tkinter</span><span>Arduino</span><span>Proteus</span></div>
+        <a href="https://www.linkedin.com/posts/akshat-sharma-02b48235b_sih2025-innovation-hackathon-activity-7377251687809572865-i0zy" target="_blank" class="proj-link">View Post →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ CONTACT ══════════ -->
+<section id="contact">
+  <canvas id="star-canvas"></canvas>
+
+  <div class="contact-card reveal">
+    <h2>Let's <em>Talk</em></h2>
+    <p class="sub">Building a new system, a game, or just want to connect in the dark? I'm always listening.</p>
+
+    <div class="form-field">
+      <label>Full Name</label>
+      <input type="text" placeholder="John Doe"/>
+    </div>
+    <div class="form-field">
+      <label>Email</label>
+      <input type="email" placeholder="john@email.com"/>
+    </div>
+    <div class="form-field">
+      <label>Message</label>
+      <textarea rows="4" placeholder="Share your thoughts..."></textarea>
+    </div>
+    <button class="send-btn" onclick="(function(){const n=document.querySelector('.form-field input[type=text]').value;const m=document.querySelector('.form-field textarea').value;window.location.href='mailto:akshatsharma31109@gmail.com?subject=Portfolio%20Contact%20from%20'+encodeURIComponent(n)+'&body='+encodeURIComponent(m);})()">Send Message</button>
+
+    <div class="contact-socials">
+      <a href="https://github.com/Aksh-attt" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/akshat-sharma-02b48235b/" target="_blank">LinkedIn</a>
+      <a href="/cdn-cgi/l/email-protection#1f7e746c777e6b6c777e6d727e2c2e2e2f265f78727e7673317c7072">Email</a>
+      <a href="https://github.com/Aksh-attt" target="_blank">Resume</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Akshat Sharma</span>
+  <span>Backend · Game Dev · EEE</span>
+  <span>Built in the dark ☽</span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*.11;ry+=(my-ry)*.11;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+
+// ── HERO THREE.JS ──
+(function(){
+  const canvas=document.getElementById('hero-canvas');
+  const W=window.innerWidth,H=window.innerHeight;
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(W,H);
+  const scene=new THREE.Scene();
+  scene.fog=new THREE.FogExp2(0x070604,.07);
+  const cam=new THREE.PerspectiveCamera(55,W/H,.1,100);
+  cam.position.z=6;
+  scene.add(new THREE.AmbientLight(0x1a1208,.6));
+  const ptLight=new THREE.PointLight(0xc8843a,2.5,10);
+  ptLight.position.set(0,0,3);scene.add(ptLight);
+  const rimLight=new THREE.PointLight(0x2a1008,.8,15);
+  rimLight.position.set(-6,3,0);scene.add(rimLight);
+
+  // Floating dark shards
+  const shapes=[];
+  const geoTypes=[
+    ()=>new THREE.TetrahedronGeometry(.25+Math.random()*.2),
+    ()=>new THREE.OctahedronGeometry(.2+Math.random()*.15),
+    ()=>new THREE.IcosahedronGeometry(.15+Math.random()*.1),
+  ];
+  for(let i=0;i<10;i++){
+    const g=geoTypes[i%3]();
+    const m=new THREE.MeshStandardMaterial({
+      color:i<6?0x1a1510:0x2a1f14,
+      metalness:.9,roughness:.5,
+      wireframe:i>=7,
+    });
+    if(i>=7)m.color.set(0x3a2c1c);
+    const mesh=new THREE.Mesh(g,m);
+    const a=(i/10)*Math.PI*2;
+    const r=2.8+Math.random()*1.5;
+    mesh.position.set(Math.cos(a)*r,(Math.random()-.5)*3,(Math.random()-.5)*2);
+    mesh.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,Math.random()*Math.PI);
+    scene.add(mesh);
+    shapes.push({mesh,rotSpd:.003+Math.random()*.005,
+      orbitA:a,orbitR:r,orbitSpd:.0006+Math.random()*.001,
+      floatSpd:.4+Math.random()*.5,floatAmp:.1+Math.random()*.2,initY:mesh.position.y});
+  }
+
+  // Stars
+  const sg=new THREE.BufferGeometry();
+  const sp=new Float32Array(1000*3);
+  for(let i=0;i<1000*3;i++)sp[i]=(Math.random()-.5)*30;
+  sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0x3a2c1c,size:.015})));
+
+  // Central lantern orb
+  const orbMesh=new THREE.Mesh(new THREE.SphereGeometry(.12,16,16),
+    new THREE.MeshStandardMaterial({color:0xf5c842,emissive:0xc8843a,emissiveIntensity:1}));
+  scene.add(orbMesh);
+
+  let mouseX=0,mouseY=0,t=0;
+  document.addEventListener('mousemove',e=>{
+    mouseX=(e.clientX/window.innerWidth-.5)*2;
+    mouseY=-(e.clientY/window.innerHeight-.5)*2;
+  });
+
+  (function loop(){
+    requestAnimationFrame(loop);t+=.01;
+    cam.position.x+=(mouseX*.4-cam.position.x)*.02;
+    cam.position.y+=(mouseY*.25-cam.position.y)*.02;
+    cam.lookAt(scene.position);
+    ptLight.intensity=2+Math.sin(t*3.1)*.4+Math.sin(t*7.3)*.15;
+    orbMesh.position.y=Math.sin(t*.7)*.3;
+    orbMesh.position.x=Math.sin(t*.4)*.2;
+    ptLight.position.copy(orbMesh.position);ptLight.position.z=3;
+    shapes.forEach(s=>{
+      s.orbitA+=s.orbitSpd;
+      s.mesh.position.x=Math.cos(s.orbitA)*s.orbitR;
+      s.mesh.position.z=Math.sin(s.orbitA)*1.5;
+      s.mesh.position.y=s.initY+Math.sin(t*s.floatSpd)*s.floatAmp;
+      s.mesh.rotation.x+=s.rotSpd;s.mesh.rotation.y+=s.rotSpd*.7;
+    });
+    renderer.render(scene,cam);
+  })();
+
+  window.addEventListener('resize',()=>{
+    const W=window.innerWidth,H=window.innerHeight;
+    cam.aspect=W/H;cam.updateProjectionMatrix();
+    renderer.setSize(W,H);
+  });
+})();
+
+// ── STAR CANVAS (contact) ──
+(function(){
+  const canvas=document.getElementById('star-canvas');
+  const ctx=canvas.getContext('2d');
+  function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+  const stars=Array.from({length:200},()=>({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*.8+.2,
+    op:Math.random(),
+    spd:Math.random()*.003+.001
+  }));
+  (function loop(){
+    requestAnimationFrame(loop);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(s=>{
+      s.op+=s.spd;
+      const opacity=(.3+.4*Math.sin(s.op))*.7;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,132,58,${opacity})`;
+      ctx.fill();
+    });
+  })();
+})();
+
+// ── SCROLL REVEAL ──
+const revEls=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+},{threshold:.08,rootMargin:'0px 0px -50px 0px'});
+revEls.forEach(el=>obs.observe(el));
+
+// ── SKILL BARS (animate on reveal) ──
+const barObs=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.querySelectorAll('.skill-bar-fill').forEach(bar=>{
+        bar.style.width=bar.dataset.w+'%';
+      });
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.skill-card').forEach(c=>barObs.observe(c));
+</script>
+</body>
+</html>
