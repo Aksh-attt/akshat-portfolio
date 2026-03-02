@@ -303,7 +303,7 @@ nav ul a:hover::after{width:100%;}
   position:absolute;top:.7rem;left:1rem;
   font-size:.5rem;color:var(--dim);letter-spacing:.3em;
 }
-.code-block pre{margin-top:1rem;color:var(--ghost);}
+.code-block pre{margin-top:1rem;color:var(--ghost);overflow-x:auto;white-space:pre-wrap;word-break:break-word;}
 .code-kw{color:var(--amber);}
 .code-str{color:var(--yellow);}
 .code-fn{color:#a0c8a0;}
@@ -549,7 +549,6 @@ footer span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:v
 
 @media(max-width:900px){
   nav{padding:1rem 1.5rem;}
-  nav ul{gap:1.5rem;}
   .hero-layout{grid-template-columns:1fr;padding:0 1.5rem;text-align:center;}
   .hero-visual{height:50vw;max-height:350px;}
   .hero-subtitle,.hero-ctas{margin-left:auto;margin-right:auto;}
@@ -564,6 +563,33 @@ footer span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:v
   .proj-card:not(:first-child) .proj-visual{aspect-ratio:16/7 !important;}
   footer{flex-direction:column;gap:1rem;text-align:center;padding:1.5rem;}
 }
+
+/* ── HAMBURGER MENU (mobile) ── */
+.hamburger{
+  display:none;
+  flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:4px;z-index:600;
+}
+.hamburger span{
+  display:block;width:22px;height:1.5px;
+  background:var(--pale);transition:all .3s;
+}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(4.5px,4.5px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4.5px,-4.5px);}
+
+@media(max-width:900px){
+  .hamburger{display:flex;}
+  nav ul{
+    display:none;
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    background:rgba(7,6,4,.97);
+    flex-direction:column;align-items:center;justify-content:center;
+    gap:2.5rem;z-index:590;
+  }
+  nav ul.open{display:flex;}
+  nav ul a{font-size:1rem;letter-spacing:.3em;}
+}
 </style>
 </head>
 <body>
@@ -574,11 +600,14 @@ footer span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:v
 <!-- NAV -->
 <nav>
   <a href="#hero" class="nav-logo">A<span>.</span>Sharma</a>
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul id="nav-menu">
+    <li><a href="#about" onclick="closeMenu()">About</a></li>
+    <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
+    <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
   </ul>
 </nav>
 
@@ -767,7 +796,7 @@ footer span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:v
   <span class="code-fn">role</span>: <span class="code-str">"Backend Engineer"</span>,
   <span class="code-fn">passion</span>: <span class="code-str">"Game Development"</span>,
   <span class="code-fn">degree</span>: <span class="code-str">"B.Tech EEE"</span>,
-  <span class="code-fn">stack</span>: [<span class="code-str">"Node.js"</span>, <span class="code-str">"Python"</span>, <span class="code-str">"PostgreSQL"</span>],
+  <span class="code-fn">stack</span>: [<span class="code-str">"Java"</span>, <span class="code-str">"Spring Boot"</span>, <span class="code-str">"MySQL"</span>],
   <span class="code-fn">currentlyBuilding</span>: <span class="code-str">"something dark"</span>,
   <span class="code-cm">// open to: collabs, full-time, game jams</span>
 };</pre>
@@ -836,7 +865,7 @@ footer span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:v
       <button class="copy-btn" onclick="navigator.clipboard.writeText('akshatsharma31109@gmail.com').then(()=>{this.textContent='✓ Copied!'}).catch(()=>{window.location.href='mailto:akshatsharma31109@gmail.com'})">
         ⊕ Copy Email Address
       </button>
-      <a href="mailto:akshatsharma31109@gmail.com" style="display:block;margin-top:.6rem;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink);opacity:.7;text-decoration:none;">or open gmail →</a>
+      <a href="/cdn-cgi/l/email-protection#3e5f554d565f4a4d565f4c535f0d0f0f0e077e59535f5752105d5153" style="display:block;margin-top:.6rem;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink);opacity:.7;text-decoration:none;">or open gmail →</a>
     </div>
 
 
@@ -1170,7 +1199,7 @@ footer span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:v
     <div class="contact-socials">
       <a href="https://github.com/Aksh-attt" target="_blank">GitHub</a>
       <a href="https://www.linkedin.com/in/akshat-sharma-02b48235b/" target="_blank">LinkedIn</a>
-      <a href="mailto:akshatsharma31109@gmail.com">Email</a>
+      <a href="/cdn-cgi/l/email-protection#8feee4fce7eefbfce7eefde2eebcbebebfb6cfe8e2eee6e3a1ece0e2">Email</a>
       <a href="https://github.com/Aksh-attt" target="_blank">Resume</a>
     </div>
   </div>
@@ -1182,7 +1211,7 @@ footer span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:v
   <span>Built in the dark ☽</span>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // ── CURSOR ──
 const cur = document.getElementById('cur');
@@ -1322,13 +1351,26 @@ revEls.forEach(el=>obs.observe(el));
 const barObs=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting){
-      entry.target.querySelectorAll('.skill-bar-fill').forEach(bar=>{
+      entry.target.querySelectorAll('.skill-fill').forEach(bar=>{
         bar.style.width=bar.dataset.w+'%';
       });
     }
   });
 },{threshold:.3});
 document.querySelectorAll('.skill-card').forEach(c=>barObs.observe(c));
+
+// ── HAMBURGER MENU ──
+const hamburger = document.getElementById('hamburger');
+const navMenu = document.getElementById('nav-menu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  navMenu.classList.toggle('open');
+});
+function closeMenu(){
+  hamburger.classList.remove('open');
+  navMenu.classList.remove('open');
+}
+
 </script>
 </body>
 </html>
